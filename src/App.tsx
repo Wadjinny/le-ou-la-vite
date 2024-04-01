@@ -50,7 +50,9 @@ function App() {
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
-        fetch("/french-words.json", { signal })
+        const link = window.location.href.includes("localhost") ? "/french-words.json" : "https://wadjinny.github.io/le-ou-la-vite/french-words.json"
+        console.log(link);
+        fetch(link, { signal })
             .then((response) => response.json())
             .then((data) => {
                 setFrenchWords(data);
