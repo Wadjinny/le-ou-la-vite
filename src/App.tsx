@@ -40,8 +40,6 @@ const french_chars_simple = {
     æ: "ae",
 };
 function App() {
-    console.log("App rendered");
-    const [french_words, setFrenchWords] = useState([]);
     const [fuse, setFuse] = useState({});
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
@@ -51,13 +49,11 @@ function App() {
         const controller = new AbortController();
         const signal = controller.signal;
         const link = window.location.href.includes("localhost") ? "/french-words.json" : "https://wadjinny.github.io/le-ou-la-vite/french-words.json"
-        console.log(link);
         fetch(link, { signal })
             .then((response) => response.json())
             .then((data) => {
-                setFrenchWords(data);
-                console.log("fetch data");
-                console.log(data.slice(0, 5));
+                // console.log("fetch data");
+                // console.log(data.slice(0, 5));
                 const myIndex = Fuse.createIndex(['s'], data)
                 const new_fuse = new Fuse(data, fuseOptions,myIndex);
                 setFuse(new_fuse);
@@ -72,17 +68,16 @@ function App() {
         };
     }, [inputRef]);
 
-    // const fuse = new Fuse(french_words, fuseOptions)
     useEffect(() => {
         const timeout = setTimeout(() => {
             if (Object.keys(fuse).length === 0) return;
             const search_string = search
                 .toLowerCase()
                 .replace(/[àâäçéèêëîïôöùûüÿœæ]/g, (char) => french_chars_simple[char]);
-            console.log(search_string);
+            // console.log(search_string);
             const result = fuse.search(search_string);
             setSearchResult(result.slice(0, 5));
-            console.log(searchResult);
+            // console.log(searchResult);
         }, 500);
         return () => {
             clearTimeout(timeout);
