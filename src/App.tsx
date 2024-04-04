@@ -49,6 +49,8 @@ function App() {
         const controller = new AbortController();
         const signal = controller.signal;
         const link = window.location.href.includes("localhost") ? "/french-words.json" : "https://wadjinny.github.io/le-ou-la-vite/french-words.json"
+        // get vite base url
+        // const base_url = import.meta.env.BASE_URL;
         fetch(link, { signal })
             .then((response) => response.json())
             .then((data) => {
