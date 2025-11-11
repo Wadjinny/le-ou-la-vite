@@ -1,6 +1,13 @@
 import Fuse from "fuse.js";
+import type { FuseResult } from "fuse.js";
 import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+
+type WordEntry = {
+    s: string;
+    g: string;
+    w: string;
+};
 
 const fuseOptions = {
     // isCaseSensitive: false,
@@ -19,7 +26,7 @@ const fuseOptions = {
     keys: ["s"],
 };
 
-const french_chars_simple = {
+const french_chars_simple: Record<string, string> = {
     à: "a",
     â: "a",
     ä: "a",
@@ -40,9 +47,9 @@ const french_chars_simple = {
     æ: "ae",
 };
 function App() {
-    const [fuse, setFuse] = useState({});
+    const [fuse, setFuse] = useState<Fuse<WordEntry> | null>(null);
     const [search, setSearch] = useState("");
-    const [searchResult, setSearchResult] = useState([]);
+    const [searchResult, setSearchResult] = useState<FuseResult<WordEntry>[]>([]);
     // create ref to store the input element
     const inputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
@@ -56,8 +63,8 @@ function App() {
             .then((data) => {
                 // console.log("fetch data");
                 // console.log(data.slice(0, 5));
-                const myIndex = Fuse.createIndex(['s'], data)
-                const new_fuse = new Fuse(data, fuseOptions,myIndex);
+                const myIndex = Fuse.createIndex<WordEntry>(["s"], data);
+                const new_fuse = new Fuse<WordEntry>(data, fuseOptions, myIndex);
                 setFuse(new_fuse);
             })
             .catch((error) => {
@@ -72,14 +79,27 @@ function App() {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            if (Object.keys(fuse).length === 0) return;
-            const search_string = search
+            if (!fuse) return;
+
+            const trimmedSearch = search.trim();
+            if (!trimmedSearch) {
+                setSearchResult([]);
+                return;
+            }
+
+            const normalizedSearch = trimmedSearch
                 .toLowerCase()
                 .replace(/[àâäçéèêëîïôöùûüÿœæ]/g, (char) => french_chars_simple[char]);
-            // console.log(search_string);
-            const result = fuse.search(search_string);
+
+            const result = fuse.search(normalizedSearch);
+            const exactMatch = result.find(({ item }) => item.s === normalizedSearch);
+
+            if (exactMatch) {
+                setSearchResult([exactMatch]);
+                return;
+            }
+
             setSearchResult(result.slice(0, 5));
-            // console.log(searchResult);
         }, 500);
         return () => {
             clearTimeout(timeout);
