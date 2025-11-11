@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+- the project use vite react + typescript
+- for icons lucid react
+- for styling tailwind css
+- for dependency management pnpm 
