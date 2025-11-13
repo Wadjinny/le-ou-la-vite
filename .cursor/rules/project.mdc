@@ -5,6 +5,10 @@ alwaysApply: true
 - for icons lucid react
 - for styling tailwind css
 - for dependency management pnpm 
+- Always search for the simplest solution
+- Make sure not be redundent
+- Always search for a tested solution or use a dedicated tool instead of reinvinting the wheel
+- For quering the backend @tanstack/react-query is used
 
 - backend uses python + fastapi
 - for backend dependency management poetry is used
