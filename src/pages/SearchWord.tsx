@@ -2,6 +2,8 @@ import Fuse from "fuse.js";
 import type { FuseResult } from "fuse.js";
 import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useContext } from "react";
+import { ThemeContext } from "../context/theme";
 type WordEntry = {
     s: string;
     g: string;
@@ -47,6 +49,7 @@ const french_chars_simple: Record<string, string> = {
 };
 function SearchWords() {
     const WORD_PARAM = "word";
+    const theme = useContext(ThemeContext)
     const [fuse, setFuse] = useState<Fuse<WordEntry> | null>(null);
     const [search, setSearch] = useState(() => {
         const params = new URLSearchParams(window.location.search);
