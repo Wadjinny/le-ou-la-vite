@@ -5,3 +5,6 @@ alwaysApply: true
 - for icons lucid react
 - for styling tailwind css
 - for dependency management pnpm 
+
+- backend uses python + fastapi
+- for backend dependency management poetry is used
