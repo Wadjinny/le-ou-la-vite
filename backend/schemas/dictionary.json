@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "All french words dictionary with definitions ande examples",
+    "properties": {
+        "word": {
+            "type": "string",
+            "description": "a french word"
+        },
+        "genre": {
+            "type": "string",
+            "description": "the genre of the word (masculine or feminine)"
+        },
+        "def_text": {
+            "type": "string",
+            "description": "the definition of the word"
+        },
+        "def_example": {
+            "type": "string",
+            "description": "an example of the word"
+        },
+        "id": {
+            "type": "string",
+            "description": "the internal id of the word"
+        }
+    }
+  }
+
+
+
+
+

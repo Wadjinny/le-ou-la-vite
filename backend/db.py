@@ -2,9 +2,11 @@ from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import os   
 from sqlalchemy import text
+from sqlalchemy.orm import Session
 load_dotenv()
 from sqlalchemy.pool import QueuePool
-
+from typing import Annotated
+from fastapi import Depends
 POSTGRES_CONNECTION_STRING = os.getenv("POSTGRES_CONNECTION_STRING")
 
 
@@ -19,7 +21,10 @@ engine = create_engine(
     pool_recycle=1800       # Recycle connections after 30 minutes (helps avoid disconnects).
 )
 
-with engine.connect() as connection:
-    result = connection.execute(text("SELECT 1"))
-    print(result.fetchone())
-
+# with engine.connect() as connection:
+#     result = connection.execute(text("SELECT 1"))
+#     print(result.fetchone())
+def get_conn():
+    with Session(engine) as connection:
+        yield connection
+dbDep = Annotated[Session,Depends(get_conn)]
