@@ -54,3 +54,11 @@ jobs:
               ./bin/symlink_service.sh
               ./bin/restart_service.sh
             EOF
+
+      - name: Restart nginx
+        run: |
+            ssh -q -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+              source ~/.zshrc
+              sudo nginx -t
+              sudo nginx -s reload
+            EOF
