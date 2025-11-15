@@ -3,6 +3,7 @@ import type { FuseResult } from "fuse.js";
 import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { ThemeContext } from "../context/theme";
 type WordEntry = {
     s: string;
@@ -155,11 +156,14 @@ function Word({ genre, word, userInput }: { genre: string; word: string; userInp
         );
     const isExactMatch = userInput === word;
     return (
-        <div className={`flex justify-center rounded-md border-2 border-slate-300 text-center bg-slate-200 py-5 ${isExactMatch ? "bg-green-200 w-full h-60" : "w-1/2 min-w-s"}`}>
+        <Link
+            to={`/word-definition/${word}`}
+            className={`flex justify-center rounded-md border-2 border-slate-300 text-center bg-slate-200 py-5 hover:bg-slate-300 transition-colors ${isExactMatch ? "bg-green-200 w-full h-60" : "w-1/2 min-w-s"}`}
+        >
             <p className={`capitalize ${isExactMatch ? "font-bold text-4xl" : ""}`}>
                 <span>{prenom}</span>
                 <span className="capitalize">{word}</span>
             </p>
-        </div>
+        </Link>
     );
 }

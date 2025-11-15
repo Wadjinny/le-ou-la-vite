@@ -1,9 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from backend.db import get_conn
 from sqlalchemy import text
 from backend.models.word_definintion import dictionary
 from fastapi import Depends
 from sqlalchemy.orm import Session
+from backend.utils import setup_logging
+
+logger = setup_logging(__name__)
 router = APIRouter()
 
 
@@ -33,6 +36,8 @@ async def get_definition(word: str,db:Session=Depends(get_conn)):
         ;
         """
     result = db.execute(text(query), {"word": word}).fetchone()
+    if not result:
+        raise HTTPException(status_code=404, detail=f"Word {word} not found")
     result_dict = {
         "word": result.word,
         "genre": result.genre,
