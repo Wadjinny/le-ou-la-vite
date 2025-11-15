@@ -1,2 +1,2 @@
 sudo systemctl daemon-reload
-sudo systemctl restart fastapi_app
+sudo systemctl restart le-ou-la-fastapi
