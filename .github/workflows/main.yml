@@ -23,7 +23,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-          
+
       - name: check into main
         run: |
             ssh -q -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
@@ -35,6 +35,7 @@ jobs:
         run: |
             ssh -q -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
               cd /home/ubuntu/thinkering/le-ou-la-vite
+              source ~/.zshrc
               pnpm install
             EOF
 
@@ -42,6 +43,7 @@ jobs:
         run: |
             ssh -q -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
               cd /home/ubuntu/thinkering/le-ou-la-vite
+              source ~/.zshrc
               pnpm build
             EOF
 
