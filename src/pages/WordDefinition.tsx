@@ -40,10 +40,10 @@ export default function WordDefinition() {
   return (
     <>
       <NavBar></NavBar>
-      <div className="flex flex-col items-center justify-center min-h-[65vh] text-slate-500">
+      <div className="flex flex-col items-center justify-center min-h-[65vh] text-slate-500 dark:text-gray-400">
         {isPending && (
-          <p className="flex items-center justify-center gap-2 text-2xl text-slate-500">
-            <Loader className="animate-spin text-slate-500" size={24} />{" "}
+          <p className="flex items-center justify-center gap-2 text-2xl text-slate-500 dark:text-gray-400">
+            <Loader className="animate-spin text-slate-500 dark:text-gray-400" size={24} />{" "}
             Chargement...
           </p>
         )}

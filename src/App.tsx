@@ -13,29 +13,39 @@ const queryClient = new QueryClient()
 
 export default function App() {
   const [theme, setTheme] = useState<themeType>('light');
+  
   useEffect(() => {
-    const theme = localStorage.getItem('theme');
-    if (theme) {
-      setTheme(theme as themeType);
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      setTheme(storedTheme as themeType);
     } else {
       setTheme('light');
     }
   }, []);
+  
   useEffect(() => {
     localStorage.setItem('theme', theme);
+    const htmlElement = document.documentElement;
+    if (theme === 'dark') {
+      htmlElement.classList.add('dark');
+    } else {
+      htmlElement.classList.remove('dark');
+    }
   }, [theme]);
+  
   return (
     <>
-      <ThemeContext value={theme}>
-        <QueryClientProvider client={queryClient}>
-          <Routes>
-              <Route path="/" element={<SearchWords />} />
-              <Route path="/word-definition/:word" element={<WordDefinition />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-        </QueryClientProvider>
+      <ThemeContext value={{theme, setTheme}}>
+        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+          <QueryClientProvider client={queryClient}>
+            <Routes>
+                <Route path="/" element={<SearchWords />} />
+                <Route path="/word-definition/:word" element={<WordDefinition />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+          </QueryClientProvider>
+        </div>
       </ThemeContext>
-
     </>
   );
   }
