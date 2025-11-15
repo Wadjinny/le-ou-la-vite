@@ -6,7 +6,7 @@ After=network.target
 User=ubuntu
 Group=ubuntu
 WorkingDirectory=/home/ubuntu/thinkering/le-ou-la-vite
-ExecStart=./bin/prod.sh
+ExecStart=/home/ubuntu/thinkering/le-ou-la-vite/bin/prod.sh
 Restart=always
 RestartSec=5
 Environment=PYTHONUNBUFFERED=1
