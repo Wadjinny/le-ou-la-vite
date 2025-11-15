@@ -45,7 +45,7 @@ jobs:
 
       - name: Restart Backend
         run: |
-            ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            ssh -q -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
               cd /home/ubuntu/thinkering/le-ou-la-vite
               ./bin/into_main.sh
               ./bin/symlink_service.sh
