@@ -4,7 +4,6 @@ import os
 import uvicorn
 from backend.utils import setup_logging
 from backend.routes import definition_router
-load_dotenv()
 
 logger = setup_logging(__name__)
 
@@ -18,6 +17,7 @@ async def read_root():
 
 
 if __name__ == "__main__":
+    load_dotenv(".env.development")
     port = int(os.getenv("VITE_API_PORT"))
     logger.info(f"Starting server on port {port}")
     uvicorn.run("backend.main:app", host="0.0.0.0", port=port, reload=True)

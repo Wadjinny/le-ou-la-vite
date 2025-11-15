@@ -23,7 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 package-lock.json
-.env
+.env*
 .venv
 *.pyc
 test/*
+nginx.conf
