@@ -40,7 +40,14 @@ jobs:
 
       - name: Upload frontend build to server
         run: |
-          rsync -avz --delete ./dist/ \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.HOME_PATH }}/le-ou-la-vite/
+          rsync -avz ./dist/ \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/ubuntu/thinkering/le-ou-la-vite/dist/
 
-        
+      - name: Restart Backend
+        run: |
+            ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+              cd /home/ubuntu/thinkering/le-ou-la-vite
+              ./bin/into_main.sh
+              ./bin/symlink_service.sh
+              ./bin/restart_service.sh
+             EOF

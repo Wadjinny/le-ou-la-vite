@@ -27,4 +27,4 @@ package-lock.json
 .venv
 *.pyc
 test/*
-nginx.conf
+bin/sync_env.sh

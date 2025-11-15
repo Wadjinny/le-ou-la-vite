@@ -1,0 +1,19 @@
+[Unit]
+Description=Le-ou-la FastAPI Backend
+After=network.target
+StartLimitBurst=10
+StartLimitIntervalSec=1min
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/thinkering/le-ou-la-vite
+ExecStart=/home/ubuntu/thinkering/le-ou-la-vite/bin/prod.sh
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+Environment=PATH=/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+
+[Install]
+WantedBy=multi-user.target

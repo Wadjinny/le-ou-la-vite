@@ -4,6 +4,7 @@ ENV_FILE=$SCRIPT_DIR/../.env.production
 echo "ENV_FILE: $ENV_FILE"
 . $ENV_FILE
 echo "API_PORT: $VITE_API_PORT"
-# single process
+cd $SCRIPT_DIR/../
 $(poetry env activate)
-uvicorn backend.main:app --host 0.0.0.0 --port $VITE_API_PORT --workers 4
+poetry install
+uvicorn backend.main:app --host 0.0.0.0 --port $VITE_API_PORT --workers 1
