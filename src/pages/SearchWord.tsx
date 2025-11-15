@@ -2,9 +2,11 @@ import Fuse from "fuse.js";
 import type { FuseResult } from "fuse.js";
 import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { Loader } from "lucide-react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../context/theme";
+import { NavBar } from "../components/NavBar";
 type WordEntry = {
     s: string;
     g: string;
@@ -27,6 +29,27 @@ const fuseOptions = {
     // fieldNormWeight: 1,
     keys: ["s"],
 };
+
+function Word({ genre, word, userInput }: { genre: string; word: string; userInput: string }) {
+    const prenom =
+        genre === "m" ? (
+            <b className="text-blue-400 font-bold text-4xl mr-2 capitalize">le</b>
+        ) : (
+            <b className="text-red-300 font-bold text-4xl mr-2 capitalize">la</b>
+        );
+    const isExactMatch = userInput === word;
+    return (
+        <Link
+            to={`/word-definition/${word}`}
+            className={`flex justify-center rounded-md border-2 border-slate-300 text-center bg-slate-200 py-5 hover:bg-slate-300 transition-colors ${isExactMatch ? "bg-green-200 w-full h-60" : "w-1/2 min-w-s"}`}
+        >
+            <p className={`capitalize ${isExactMatch ? "font-bold text-4xl" : ""}`}>
+                <span>{prenom}</span>
+                <span className="capitalize">{word}</span>
+            </p>
+        </Link>
+    );
+}
 
 const french_chars_simple: Record<string, string> = {
     à: "a",
@@ -52,7 +75,7 @@ function SearchWords() {
     const WORD_PARAM = "word";
     const theme = useContext(ThemeContext)
     const [fuse, setFuse] = useState<Fuse<WordEntry> | null>(null);
-    const [search, setSearch] = useState(() => {
+    const [searchInput, setSearchInput] = useState(() => {
         const params = new URLSearchParams(window.location.search);
         return params.get(WORD_PARAM) ?? "";
     });
@@ -86,7 +109,7 @@ function SearchWords() {
         const timeout = setTimeout(() => {
             if (!fuse) return;
 
-            const trimmedSearch = search.trim();
+            const trimmedSearch = searchInput.trim();
             if (!trimmedSearch) {
                 setSearchResult([]);
                 return;
@@ -103,25 +126,23 @@ function SearchWords() {
         return () => {
             clearTimeout(timeout);
         };
-    }, [search, fuse]);
+    }, [searchInput, fuse]);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             const params = new URLSearchParams(window.location.search);
-            params.set(WORD_PARAM, search);
+            params.set(WORD_PARAM, searchInput);
             window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
         }, 500);
         return () => {
             clearTimeout(timeout);
         };
-    }, [search]);
+    }, [searchInput]);
 
 
     return (
         <>
-            <div className="bg-slate-200 text-center text-4xl py-4 border-b-2 border-slate-200">
-                <h1 className="text-4xl text-slate-600 font-light font-serif">Le ou La</h1>
-            </div>
+            <NavBar></NavBar>
             <div id="container" className="container mx-auto flex flex-col py-4 px-4">
                 <div id="input" className="flex flex-row items-center justify-center">
                     <input
@@ -129,16 +150,16 @@ function SearchWords() {
                         type="text"
                         className="w-full text-2xl text-slate-800 text-center focus:outline-slate-300 focus:ring-0 rounded-md p-2 bg-white border-2 border-slate-300"
                         placeholder="Search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
                     />
                     <FaSearch className="text-4xl text-slate-400 p-2" />
                 </div>
                 <div className="gap-2 pt-2 items-center text-2xl flex flex-col w-full">
                     {searchResult.map((result, index) => {
-                        return <Word key={index} genre={result.item.g} word={result.item.w} userInput={search} />;
+                        return <Word key={index} genre={result.item.g} word={result.item.w} userInput={searchInput} />;
                     })}
-                    {searchResult.length == 0 ? <p className="text-2xl">Start by typing ...</p> : ""}
+                    {searchResult.length == 0 ? <p className="text-2xl text-slate-500 flex items-center justify-center gap-2">{searchInput.length > 0 ? <><Loader className="animate-spin text-slate-500" size={24} /> Chargement...</> : "Commencez par taper ..."}</p> : ""}
                 </div>
             </div>
         </>
@@ -146,24 +167,3 @@ function SearchWords() {
 }
 
 export default SearchWords;
-
-function Word({ genre, word, userInput }: { genre: string; word: string; userInput: string }) {
-    const prenom =
-        genre === "m" ? (
-            <b className="text-blue-400 font-bold text-4xl mr-2 capitalize">le</b>
-        ) : (
-            <b className="text-red-300 font-bold text-4xl mr-2 capitalize">la</b>
-        );
-    const isExactMatch = userInput === word;
-    return (
-        <Link
-            to={`/word-definition/${word}`}
-            className={`flex justify-center rounded-md border-2 border-slate-300 text-center bg-slate-200 py-5 hover:bg-slate-300 transition-colors ${isExactMatch ? "bg-green-200 w-full h-60" : "w-1/2 min-w-s"}`}
-        >
-            <p className={`capitalize ${isExactMatch ? "font-bold text-4xl" : ""}`}>
-                <span>{prenom}</span>
-                <span className="capitalize">{word}</span>
-            </p>
-        </Link>
-    );
-}
