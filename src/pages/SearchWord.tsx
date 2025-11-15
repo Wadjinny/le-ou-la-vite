@@ -3,10 +3,9 @@ import type { FuseResult } from "fuse.js";
 import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Loader } from "lucide-react";
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { ThemeContext } from "../context/theme";
 import { NavBar } from "../components/NavBar";
+import { FRONT_URL } from "../utils";
 type WordEntry = {
     s: string;
     g: string;
@@ -33,15 +32,15 @@ const fuseOptions = {
 function Word({ genre, word, userInput }: { genre: string; word: string; userInput: string }) {
     const prenom =
         genre === "m" ? (
-            <b className="text-blue-400 font-bold text-4xl mr-2 capitalize">le</b>
+            <b className="text-blue-400 dark:text-blue-500 font-bold text-4xl mr-2 capitalize">le</b>
         ) : (
-            <b className="text-red-300 font-bold text-4xl mr-2 capitalize">la</b>
+            <b className="text-red-300 dark:text-red-400 font-bold text-4xl mr-2 capitalize">la</b>
         );
     const isExactMatch = userInput === word;
     return (
         <Link
             to={`/word-definition/${word}`}
-            className={`flex justify-center rounded-md border-2 border-slate-300 text-center bg-slate-200 py-5 hover:bg-slate-300 transition-colors ${isExactMatch ? "bg-green-200 w-full h-60" : "w-1/2 min-w-s"}`}
+            className={`flex justify-center rounded-md border-2 border-slate-300 dark:border-gray-600 text-center bg-slate-200 dark:bg-gray-700 dark:text-gray-200 py-5 hover:bg-slate-300 dark:hover:bg-gray-600 transition-colors ${isExactMatch ? "bg-green-200 dark:bg-green-800 w-full h-60" : "w-1/2 min-w-s"}`}
         >
             <p className={`capitalize ${isExactMatch ? "font-bold text-4xl" : ""}`}>
                 <span>{prenom}</span>
@@ -73,8 +72,21 @@ const french_chars_simple: Record<string, string> = {
 };
 function SearchWords() {
     const WORD_PARAM = "word";
-    const theme = useContext(ThemeContext)
+    const storage_key = 'frenchDict';
     const [fuse, setFuse] = useState<Fuse<WordEntry> | null>(null);
+    const [frenchDict, setFrenchDict] = useState<any>(()=>{
+        return JSON.parse(window.localStorage.getItem(storage_key) ?? '[]');
+    });
+    useEffect(() => {
+        if(frenchDict.length > 0){
+            return;
+        }
+        fetch(`${FRONT_URL}/french-words.json`).then((res) =>
+            res.json().then((data) => {
+                window.localStorage.setItem(storage_key, JSON.stringify(data));
+                setFrenchDict(data);
+            }));
+    }, []);
     const [searchInput, setSearchInput] = useState(() => {
         const params = new URLSearchParams(window.location.search);
         return params.get(WORD_PARAM) ?? "";
@@ -83,27 +95,12 @@ function SearchWords() {
     // create ref to store the input element
     const inputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
-        const controller = new AbortController();
-        const signal = controller.signal;
-        const link = "french-words.json"
-        // get vite base url
-        // const base_url = import.meta.env.BASE_URL;
-        fetch(link, { signal })
-            .then((response) => response.json())
-            .then((data) => {
-                const myIndex = Fuse.createIndex<WordEntry>(["s"], data);
-                const new_fuse = new Fuse<WordEntry>(data, fuseOptions, myIndex);
-                setFuse(new_fuse);
-            })
-            .catch((error) => {
-                throw Error(error);
-            });
+        const myIndex = Fuse.createIndex<WordEntry>(["s"], frenchDict);
+        const new_fuse = new Fuse<WordEntry>(frenchDict, fuseOptions, myIndex);
+        setFuse(new_fuse);
 
         inputRef.current?.focus();
-        return () => {
-            controller.abort();
-        };
-    }, [inputRef]);
+    }, [inputRef, frenchDict]);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -148,18 +145,18 @@ function SearchWords() {
                     <input
                         ref={inputRef}
                         type="text"
-                        className="w-full text-2xl text-slate-800 text-center focus:outline-slate-300 focus:ring-0 rounded-md p-2 bg-white border-2 border-slate-300"
+                        className="w-full text-2xl text-slate-800 dark:text-gray-200 text-center focus:outline-slate-300 dark:focus:outline-gray-600 focus:ring-0 rounded-md p-2 bg-white dark:bg-gray-800 border-2 border-slate-300 dark:border-gray-600 transition-colors"
                         placeholder="Search"
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
                     />
-                    <FaSearch className="text-4xl text-slate-400 p-2" />
+                    <FaSearch className="text-4xl text-slate-400 dark:text-gray-400 p-2" />
                 </div>
                 <div className="gap-2 pt-2 items-center text-2xl flex flex-col w-full">
                     {searchResult.map((result, index) => {
                         return <Word key={index} genre={result.item.g} word={result.item.w} userInput={searchInput} />;
                     })}
-                    {searchResult.length == 0 ? <p className="text-2xl text-slate-500 flex items-center justify-center gap-2">{searchInput.length > 0 ? <><Loader className="animate-spin text-slate-500" size={24} /> Chargement...</> : "Commencez par taper ..."}</p> : ""}
+                    {searchResult.length == 0 ? <p className="text-2xl text-slate-500 dark:text-gray-400 flex items-center justify-center gap-2">{searchInput.length > 0 ? <><Loader className="animate-spin text-slate-500 dark:text-gray-400" size={24} /> Chargement...</> : "Commencez par taper ..."}</p> : ""}
                 </div>
             </div>
         </>
