@@ -5,7 +5,6 @@ import { FaSearch } from "react-icons/fa";
 import { Loader } from "lucide-react";
 import { Link } from "react-router-dom";
 import { NavBar } from "../components/NavBar";
-import { FRONT_URL } from "../utils";
 type WordEntry = {
     s: string;
     g: string;
@@ -70,23 +69,9 @@ const french_chars_simple: Record<string, string> = {
     œ: "oe",
     æ: "ae",
 };
-function SearchWords() {
+function SearchWords({ frenchDict }: { frenchDict: any[] }) {
     const WORD_PARAM = "word";
-    const storage_key = 'frenchDict';
     const [fuse, setFuse] = useState<Fuse<WordEntry> | null>(null);
-    const [frenchDict, setFrenchDict] = useState<any>(()=>{
-        return JSON.parse(window.localStorage.getItem(storage_key) ?? '[]');
-    });
-    useEffect(() => {
-        if(frenchDict.length > 0){
-            return;
-        }
-        fetch(`${FRONT_URL}/french-words.json`).then((res) =>
-            res.json().then((data) => {
-                window.localStorage.setItem(storage_key, JSON.stringify(data));
-                setFrenchDict(data);
-            }));
-    }, []);
     const [searchInput, setSearchInput] = useState(() => {
         const params = new URLSearchParams(window.location.search);
         return params.get(WORD_PARAM) ?? "";
