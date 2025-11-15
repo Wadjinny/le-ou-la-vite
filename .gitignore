@@ -27,3 +27,4 @@ package-lock.json
 .venv
 *.pyc
 test/*
+bin/sync_env.sh
