@@ -24,7 +24,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_25519
           chmod 600 ~/.ssh/id_25519
-          ssh-keyscan -H {{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Install frontend
         run: pnpm install
@@ -35,6 +35,6 @@ jobs:
       - name: Upload frontend build to server
         run: |
           rsync -avz --delete ./dist/ \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:{{ secrets.HOME_PATH }}/le-ou-la-vite/dist/
-            
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.HOME_PATH }}/le-ou-la-vite/dist/
+
         
