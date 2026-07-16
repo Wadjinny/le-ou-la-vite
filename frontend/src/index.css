@@ -1,0 +1,322 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --indigo: #4f46e5;
+  --indigo-hover: #4338ca;
+  --indigo-soft: #eef2ff;
+  --indigo-100: #e0e7ff;
+  --white: #ffffff;
+  --bg: #f6f7f9;
+  --g100: #f3f4f6;
+  --g200: #e5e7eb;
+  --g300: #d1d5db;
+  --g400: #9ca3af;
+  --g500: #6b7280;
+  --g700: #374151;
+  --g900: #111827;
+
+  --green: #059669;
+  --green-soft: #ecfdf5;
+  --red: #dc2626;
+  --red-soft: #fef2f2;
+  --amber: #d97706;
+  --amber-soft: #fffbeb;
+
+  /* Gender — feminine (earned by meaning, not decoration) */
+  --rose: #db2777;
+  --rose-hover: #be185d;
+  --rose-soft: #fdf2f8;
+
+  --r-card: 20px;
+  --r-ctrl: 14px;
+  --r-pill: 999px;
+
+  --sh-card: 0 4px 16px rgba(17, 24, 39, 0.05);
+  --sh-hover: 0 8px 24px rgba(17, 24, 39, 0.09);
+  --sh-pop: 0 12px 32px rgba(79, 70, 229, 0.22);
+  --sh-pop-rose: 0 12px 32px rgba(219, 39, 119, 0.22);
+
+  --font: "Segoe UI", system-ui, -apple-system, "Inter", sans-serif;
+}
+
+.dark {
+  --indigo: #6366f1;
+  --indigo-hover: #818cf8;
+  --indigo-soft: #312e81;
+  --indigo-100: #3730a3;
+  --white: #323846;
+  --bg: #0f1115;
+  --g100: #1f232b;
+  --g200: #2e323c;
+  --g300: #3d424e;
+  --g400: #8b92a0;
+  --g500: #9ca3af;
+  --g700: #d1d5db;
+  --g900: #f3f4f6;
+
+  --green: #34d399;
+  --green-soft: #064e3b;
+  --red: #f87171;
+  --red-soft: #450a0a;
+  --amber: #fbbf24;
+  --amber-soft: #78350f;
+
+  --rose: #f472b6;
+  --rose-hover: #f9a8d4;
+  --rose-soft: #831843;
+
+  --sh-card: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --sh-hover: 0 8px 28px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --sh-pop: 0 12px 32px rgba(99, 102, 241, 0.35);
+  --sh-pop-rose: 0 12px 32px rgba(244, 114, 182, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--g900);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
+
+.sr-card {
+  background: var(--white);
+  border-radius: var(--r-card);
+  padding: 22px;
+  box-shadow: var(--sh-card);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.sr-card:hover {
+  box-shadow: var(--sh-hover);
+}
+
+.sr-card.feature {
+  background: var(--indigo);
+  color: #fff;
+  box-shadow: var(--sh-pop);
+}
+
+.sr-card.feature:hover {
+  box-shadow: var(--sh-pop);
+}
+
+.sr-card.feature.fem {
+  background: var(--rose);
+  box-shadow: var(--sh-pop-rose);
+}
+
+.sr-card.feature.fem:hover {
+  box-shadow: var(--sh-pop-rose);
+}
+
+.sr-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-ctrl);
+  background: var(--white);
+  box-shadow: var(--sh-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--g700);
+  transition: box-shadow 0.15s;
+}
+
+.sr-icon-btn:hover {
+  box-shadow: var(--sh-hover);
+}
+
+.sr-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  border-radius: var(--r-pill);
+  padding: 14px 20px;
+  box-shadow: var(--sh-card);
+  color: var(--g400);
+  transition: box-shadow 0.15s;
+}
+
+.sr-search:focus-within {
+  box-shadow: 0 0 0 3px var(--indigo-soft), var(--sh-card);
+}
+
+.sr-search input {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  padding: 0;
+  background: none;
+  width: 100%;
+  color: var(--g900);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.sr-search input::placeholder {
+  color: var(--g400);
+  font-weight: 400;
+}
+
+.sr-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  background: var(--indigo-soft);
+  color: var(--indigo);
+}
+
+.sr-chip.fem {
+  background: var(--rose-soft);
+  color: var(--rose);
+}
+
+.sr-chip.on-feature {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* Search result row */
+.sr-result {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 36rem;
+  padding: 18px 22px;
+  background: var(--white);
+  border-radius: var(--r-card);
+  box-shadow: var(--sh-card);
+  transition: box-shadow 0.15s;
+}
+
+.sr-result:hover {
+  box-shadow: var(--sh-hover);
+}
+
+.sr-result.feature {
+  max-width: 36rem;
+  padding: 26px 24px;
+  background: var(--indigo);
+  color: #fff;
+  box-shadow: var(--sh-pop);
+}
+
+.sr-result.feature.fem {
+  background: var(--rose);
+  box-shadow: var(--sh-pop-rose);
+}
+
+.sr-result__row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  align-items: center;
+  gap: 16px;
+}
+
+.sr-result__article {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.6px;
+  border-radius: var(--r-ctrl);
+  background: var(--indigo);
+  color: #fff;
+  box-shadow: var(--sh-pop);
+}
+
+.sr-result__article.fem {
+  background: var(--rose);
+  box-shadow: var(--sh-pop-rose);
+}
+
+.sr-result.feature .sr-result__article {
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: none;
+}
+
+.sr-result__word {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--g900);
+  text-transform: capitalize;
+  line-height: 1.25;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.sr-result.feature .sr-result__word {
+  font-size: 30px;
+  letter-spacing: -0.8px;
+  color: #fff;
+}
+
+.sr-result__meta {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.sr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.15s;
+}
+
+.sr-btn.primary {
+  background: var(--indigo);
+  color: #fff;
+  box-shadow: var(--sh-pop);
+}
+
+.sr-btn.primary:hover {
+  background: var(--indigo-hover);
+}
+
+.sr-btn.ghost {
+  background: var(--white);
+  color: var(--g700);
+  box-shadow: var(--sh-card);
+}
+
+.sr-btn.ghost:hover {
+  box-shadow: var(--sh-hover);
+}
