@@ -1,4 +1,4 @@
-le-ou-la.w-ilyas.site {
+le-ou-la.w-ilyas.ink, le-ou-la.w-ilyas.site {
 	encode gzip
 	root * /home/ubuntu/thinkering/le-ou-la-vite
 	try_files {path} /index.html
